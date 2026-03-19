@@ -6,5 +6,19 @@ dist/
 wheels/
 *.egg-info
 
+# Test and coverage artifacts
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+
 # Virtual environments
-.venv
+.venv/
+
+# Notebook artifacts
+.ipynb_checkpoints/
+
+# Pipeline-generated outputs
+data/processed/*.csv
+data/processed/*.json
+reports/figures/*.png

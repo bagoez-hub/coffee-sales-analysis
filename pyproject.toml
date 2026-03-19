@@ -39,6 +39,8 @@ where = ["src"]
 [tool.black]
 line-length = 120
 target-version = ["py314"]
+skip-string-normalization = true
+skip-magic-trailing-comma = true
 
 [tool.ruff]
 line-length = 120
@@ -46,7 +48,24 @@ target-version = "py314"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "N"]
-ignore = ["E501"]
+ignore = [
+	"E201",
+	"E202",
+	"E203",
+	"E221",
+	"E222",
+	"E223",
+	"E224",
+	"E225",
+	"E226",
+	"E227",
+	"E228",
+	"E231",
+	"E501",
+	"W191",
+	"W291",
+	"W293",
+]
 
 [tool.pytest.ini_options]
 minversion = "8.0"
