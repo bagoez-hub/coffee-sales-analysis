@@ -30,7 +30,37 @@ REQUIRED_COLUMNS: tuple[str, ...] = (
 
 CRITICAL_COLUMNS: tuple[str, ...] = ("money", "coffee_name", "Date", "Time")
 
-ALLOWED_TIME_OF_DAY: set[str] = {"Morning", "Afternoon", "Evening", "Night"}
+ALLOWED_TIME_OF_DAY: set[str] = {"Morning", "Afternoon", "Night"}
+
+ALLOWED_CASH_TYPES: set[str] = {"card"}
+
+ALLOWED_PRODUCTS: set[str] = {
+	"Americano",
+	"Americano with Milk",
+	"Cappuccino",
+	"Cocoa",
+	"Cortado",
+	"Espresso",
+	"Hot Chocolate",
+	"Latte",
+}
+
+ALLOWED_WEEKDAYS: set[str] = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"}
+
+ALLOWED_MONTHS: set[str] = {
+	"Jan",
+	"Feb",
+	"Mar",
+	"Apr",
+	"May",
+	"Jun",
+	"Jul",
+	"Aug",
+	"Sep",
+	"Oct",
+	"Nov",
+	"Dec",
+}
 
 WEEKDAY_ORDER: tuple[str, ...] = ("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
 MONTH_ORDER: tuple[str, ...] = (

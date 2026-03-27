@@ -15,7 +15,7 @@ def make_valid_df() -> pd.DataFrame:
 	return pd.DataFrame(
 		{
 			"hour_of_day": [10, 12],
-			"cash_type": ["card", "cash"],
+			"cash_type": ["card", "card"],
 			"money": [38.7, 24.0],
 			"coffee_name": ["Latte", "Espresso"],
 			"Time_of_Day": ["Morning", "Afternoon"],

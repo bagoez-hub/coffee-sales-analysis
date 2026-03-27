@@ -9,12 +9,10 @@ def _bucket_time_of_day(hour: float) -> str:
 	if pd.isna(hour):
 		return "Night"
 	hour_int = int(hour)
-	if 5 <= hour_int < 12:
+	if 6 <= hour_int < 12:
 		return "Morning"
-	if 12 <= hour_int < 17:
+	if 12 <= hour_int < 18:
 		return "Afternoon"
-	if 17 <= hour_int < 21:
-		return "Evening"
 	return "Night"
 
 
@@ -36,7 +34,8 @@ def clean_sales_data(df: pd.DataFrame, drop_duplicates: bool = True) -> pd.DataF
 
 	for col in ["cash_type", "coffee_name", "Time_of_Day", "Weekday", "Month_name", "Date", "Time"]:
 		if col in cleaned.columns:
-			cleaned[col] = cleaned[col].astype(str).str.strip()
+			cleaned[col] = cleaned[col].where(cleaned[col].notna(), None)
+			cleaned[col] = cleaned[col].astype("string").str.strip()
 
 	if "money" in cleaned.columns:
 		cleaned["money"] = pd.to_numeric(cleaned["money"], errors="coerce")

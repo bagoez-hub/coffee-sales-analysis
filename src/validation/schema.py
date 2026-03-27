@@ -4,7 +4,15 @@ from typing import Any
 
 import pandas as pd
 
-from config import ALLOWED_TIME_OF_DAY, CRITICAL_COLUMNS, REQUIRED_COLUMNS
+from config import (
+	ALLOWED_CASH_TYPES,
+	ALLOWED_MONTHS,
+	ALLOWED_PRODUCTS,
+	ALLOWED_TIME_OF_DAY,
+	ALLOWED_WEEKDAYS,
+	CRITICAL_COLUMNS,
+	REQUIRED_COLUMNS,
+)
 
 
 def _parse_time_series(series: pd.Series) -> pd.Series:
@@ -21,6 +29,9 @@ def _parse_time_series(series: pd.Series) -> pd.Series:
 
 def _validate_structure(df: pd.DataFrame) -> list[str]:
 	errors: list[str] = []
+	if df.shape[0] == 0:
+		errors.append("Dataset must contain at least one row")
+
 	missing = [col for col in REQUIRED_COLUMNS if col not in df.columns]
 	if missing:
 		errors.append(f"Missing required columns: {missing}")
@@ -44,8 +55,8 @@ def _validate_value_ranges(df: pd.DataFrame) -> list[str]:
 
 	if "hour_of_day" in df.columns:
 		hours = pd.to_numeric(df["hour_of_day"], errors="coerce")
-		if hours.isna().any() or not hours.dropna().between(0, 23).all():
-			errors.append("hour_of_day must be numeric and between 0 and 23")
+		if hours.isna().any() or not hours.dropna().between(6, 22).all():
+			errors.append("hour_of_day must be numeric and between 6 and 22")
 
 	if "money" in df.columns:
 		money = pd.to_numeric(df["money"], errors="coerce")
@@ -66,6 +77,26 @@ def _validate_value_ranges(df: pd.DataFrame) -> list[str]:
 		invalid_tod = sorted(set(df["Time_of_Day"].dropna().astype(str)) - ALLOWED_TIME_OF_DAY)
 		if invalid_tod:
 			errors.append(f"Time_of_Day has invalid values: {invalid_tod}")
+
+	if "cash_type" in df.columns:
+		invalid_cash_type = sorted(set(df["cash_type"].dropna().astype(str)) - ALLOWED_CASH_TYPES)
+		if invalid_cash_type:
+			errors.append(f"cash_type has invalid values: {invalid_cash_type}")
+
+	if "coffee_name" in df.columns:
+		invalid_products = sorted(set(df["coffee_name"].dropna().astype(str)) - ALLOWED_PRODUCTS)
+		if invalid_products:
+			errors.append(f"coffee_name has invalid values: {invalid_products}")
+
+	if "Weekday" in df.columns:
+		invalid_weekdays = sorted(set(df["Weekday"].dropna().astype(str)) - ALLOWED_WEEKDAYS)
+		if invalid_weekdays:
+			errors.append(f"Weekday has invalid values: {invalid_weekdays}")
+
+	if "Month_name" in df.columns:
+		invalid_month_names = sorted(set(df["Month_name"].dropna().astype(str)) - ALLOWED_MONTHS)
+		if invalid_month_names:
+			errors.append(f"Month_name has invalid values: {invalid_month_names}")
 
 	if "Date" in df.columns:
 		parsed_date = pd.to_datetime(df["Date"], errors="coerce")

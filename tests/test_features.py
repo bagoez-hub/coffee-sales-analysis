@@ -62,4 +62,4 @@ def test_derive_time_features_fills_time_of_day_when_missing() -> None:
 	)
 
 	featured = derive_time_features(df)
-	assert featured.loc[0, "Time_of_Day"] == "Evening"
+	assert featured.loc[0, "Time_of_Day"] == "Night"
