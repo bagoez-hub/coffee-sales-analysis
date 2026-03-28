@@ -7,9 +7,9 @@ def _bucket_time_of_day(hour: float) -> str:
 	if pd.isna(hour):
 		return "Night"
 	hour_int = int(hour)
-	if 5 <= hour_int < 12:
+	if 6 <= hour_int < 12:
 		return "Morning"
-	if 12 <= hour_int < 17:
+	if 12 <= hour_int < 18:
 		return "Afternoon"
 	return "Night"
 

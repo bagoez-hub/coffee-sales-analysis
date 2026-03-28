@@ -22,6 +22,7 @@ def run_pipeline(input_path: str | Path | None = None, output_dir: str | Path | 
 	assert_valid_dataset(raw_df)
 	logger.info("Dataset validation passed")
 
+	logger.info("Cleaning data and deriving features")
 	cleaned_df = clean_sales_data(raw_df)
 	logger.info(f"Cleaning complete — {cleaned_df.shape[0]} rows retained")
 
@@ -54,4 +55,4 @@ def run_pipeline(input_path: str | Path | None = None, output_dir: str | Path | 
 
 if __name__ == "__main__":
 	pipeline_report = run_pipeline()
-	print(json.dumps(pipeline_report, indent=2))
+	logger.info("Pipeline report:\n{}", json.dumps(pipeline_report, indent=2))

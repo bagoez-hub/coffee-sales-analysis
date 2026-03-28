@@ -7,6 +7,7 @@ from typing import Any
 
 import matplotlib.pyplot as plt
 from loguru import logger
+from loguru import logger
 
 from analysis.product_analysis import top_products_by_revenue, top_products_by_volume
 from analysis.sales_analysis import sales_overview
@@ -33,12 +34,13 @@ def _save_figure(path: Path, figure: Any) -> None:
 
 
 def run_full_pipeline(input_csv: str | None = None, top_n_products: int = 10) -> dict[str, Any]:
-    logger.info("Full pipeline started")
+    logger.info("Loading raw data")
     raw_df = load_raw_sales_data(input_csv)
     logger.info(f"Loaded {raw_df.shape[0]} raw rows")
     assert_valid_dataset(raw_df)
     logger.info("Dataset validation passed")
 
+    logger.info("Cleaning and deriving features")
     clean_df = clean_sales_data(raw_df)
     logger.info(f"Cleaning complete — {clean_df.shape[0]} rows retained")
     feature_df = derive_time_features(clean_df)
@@ -65,6 +67,7 @@ def run_full_pipeline(input_csv: str | None = None, top_n_products: int = 10) ->
     top_volume_df.to_csv(processed_dir / "top_products_by_volume.csv", index=False)
     top_revenue_df.to_csv(processed_dir / "top_products_by_revenue.csv", index=False)
 
+    logger.info("Generating figures")
     hourly_fig = plot_hourly_revenue(hourly_df)
     weekday_fig = plot_weekday_revenue(weekday_df)
     month_fig = plot_monthly_revenue(month_df)
@@ -116,7 +119,7 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     report = run_full_pipeline(input_csv=args.input_csv, top_n_products=args.top_n_products)
-    print(json.dumps(report, indent=2))
+    logger.info("Pipeline report:\n{}", json.dumps(report, indent=2))
 
 
 if __name__ == "__main__":
