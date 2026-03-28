@@ -13,8 +13,6 @@ def _bucket_time_of_day(hour: float) -> str:
 		return "Morning"
 	if 12 <= hour_int < 17:
 		return "Afternoon"
-	if 17 <= hour_int < 21:
-		return "Evening"
 	return "Night"
 
 
