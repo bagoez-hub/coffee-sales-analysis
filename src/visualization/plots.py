@@ -5,6 +5,8 @@ import pandas as pd
 import seaborn as sns
 from matplotlib.figure import Figure
 
+from config import WEEKDAY_ORDER
+
 
 def plot_hourly_revenue(hourly_df: pd.DataFrame) -> Figure:
 	fig, ax = plt.subplots(figsize=(10, 5))
@@ -104,5 +106,64 @@ def plot_time_product_heatmap(df: pd.DataFrame) -> Figure:
 	ax.set_title("Time-of-Day Product Pattern (Revenue)")
 	ax.set_xlabel("Coffee")
 	ax.set_ylabel("Time of Day")
+	fig.tight_layout()
+	return fig
+
+
+def plot_hourly_transactions(hourly_df: pd.DataFrame) -> Figure:
+	fig, ax = plt.subplots(figsize=(10, 5))
+	sns.barplot(data=hourly_df, x="hour_of_day", y="transactions", ax=ax, color="#4e79a7")
+	ax.set_title("Transaction Volume by Hour")
+	ax.set_xlabel("Hour of Day")
+	ax.set_ylabel("Transactions")
+	fig.tight_layout()
+	return fig
+
+
+def plot_time_of_day_revenue(tod_df: pd.DataFrame) -> Figure:
+	tod_order = [t for t in ["Morning", "Afternoon", "Night"] if t in tod_df["Time_of_Day"].values]
+	fig, ax = plt.subplots(figsize=(8, 5))
+	sns.barplot(data=tod_df, x="Time_of_Day", y="revenue", order=tod_order, ax=ax, color="#b07aa1")
+	ax.set_title("Revenue by Time of Day")
+	ax.set_xlabel("Time of Day")
+	ax.set_ylabel("Revenue")
+	fig.tight_layout()
+	return fig
+
+
+def plot_weekday_product_heatmap(df: pd.DataFrame) -> Figure:
+	pivot = df.pivot_table(
+		index="Weekday",
+		columns="coffee_name",
+		values="money",
+		aggfunc="size",
+		fill_value=0,
+	)
+	available_weekdays = [w for w in WEEKDAY_ORDER if w in pivot.index]
+	pivot = pivot.reindex(available_weekdays)
+	fig, ax = plt.subplots(figsize=(12, 5))
+	sns.heatmap(pivot, cmap="Blues", ax=ax)
+	ax.set_title("Weekday vs Product Heatmap (Transactions)")
+	ax.set_xlabel("Coffee")
+	ax.set_ylabel("Weekday")
+	fig.tight_layout()
+	return fig
+
+
+def plot_weekday_hour_heatmap(df: pd.DataFrame) -> Figure:
+	pivot = df.pivot_table(
+		index="Weekday",
+		columns="hour_of_day",
+		values="money",
+		aggfunc="size",
+		fill_value=0,
+	)
+	available_weekdays = [w for w in WEEKDAY_ORDER if w in pivot.index]
+	pivot = pivot.reindex(available_weekdays)
+	fig, ax = plt.subplots(figsize=(14, 5))
+	sns.heatmap(pivot, cmap="YlOrRd", ax=ax)
+	ax.set_title("Weekday \u00d7 Hour Transaction Heatmap")
+	ax.set_xlabel("Hour of Day")
+	ax.set_ylabel("Weekday")
 	fig.tight_layout()
 	return fig

@@ -39,3 +39,22 @@ def peak_weekday_hour(df: pd.DataFrame) -> pd.DataFrame:
 		.sort_values(["revenue", "transactions"], ascending=[False, False])
 	)
 	return result.reset_index(drop=True)
+
+
+def revenue_by_time_of_day(df: pd.DataFrame) -> pd.DataFrame:
+	result = (
+		df.groupby("Time_of_Day", as_index=False)["money"]
+		.sum()
+		.rename(columns={"money": "revenue"})
+		.sort_values("revenue", ascending=False)
+	)
+	return result.reset_index(drop=True)
+
+
+def transactions_by_weekday(df: pd.DataFrame) -> pd.DataFrame:
+	result = (
+		df.groupby(["Weekdaysort", "Weekday"], as_index=False)
+		.agg(transactions=("money", "size"))
+		.sort_values("Weekdaysort")
+	)
+	return result.reset_index(drop=True)
